@@ -16,8 +16,16 @@ Device:
 #include "DHTesp.h" // Click here to get the library: http://librarymanager/All#DHTesp
 #include "device.h"
 
-#define LED_COUNT 2
-const uint8_t arLed[LED_COUNT] = {LED_RED, LED_GREEN};
+#if defined(ESP32)
+  #define LED_COUNT 2
+  const uint8_t arLed[LED_COUNT] = {LED_RED, LED_GREEN};
+#endif
+
+#if defined(ESP8266)
+  #define LED_COUNT 3
+  const uint8_t arLed[LED_COUNT] = {LED_RED, LED_YELLOW, LED_GREEN};
+#endif
+
 int nCount=0;
 
 Ticker timer1Sec, ledOff;
@@ -71,7 +79,7 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(PIN_SW), onResetCounter, FALLING); // extra checking
 
   dht.setup(PIN_DHT, DHTesp::DHT11);
-  Wire.begin(PIN_SDA, PIN_SCL, 100000);
+  Wire.begin(PIN_SDA, PIN_SCL);
   lightMeter.begin(BH1750::CONTINUOUS_HIGH_RES_MODE, 0x23, &Wire);
 
   Serial.printf("Board: %s\n", ARDUINO_BOARD);
