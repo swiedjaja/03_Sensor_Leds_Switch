@@ -93,14 +93,8 @@ void setup() {
 
   Serial.printf("Board: %s\n", ARDUINO_BOARD);
   Serial.printf("DHT Sensor ready, sampling period: %d ms\n", dht.getMinimumSamplingPeriod());  
-#if defined(ESP32)  
-  timer1Sec.attach_ms(2*dht.getMinimumSamplingPeriod(), onReadSensors);
-#endif 
+  timer1Sec.attach_ms_scheduled(2*dht.getMinimumSamplingPeriod(), onReadSensors);
 }
 
 void loop() {
-#if defined(ESP8266)
-  onReadSensors();
-  delay(2000);
-#endif
 }
