@@ -2,12 +2,21 @@
 Program: demo gpio 2 led, 1 interrupt switch, luxMeter and DHT11
   - program will print Temperature, Humidity and Light every 2 secs
   - program will flash red Led then green Led
-Device: 
+Device for ESP32: 
 - Led Red: IO2 (active high, Anode Led to IO02 via R (68-220) Ohm, Cathode: GND)
 - Led Green: IO12 (active high, Anode Led to IO12 via R (68-220) Ohm, Cathode: GND)
-- PushButton: IO0 (active Low, add pull up 10K to 3.3V)
+- PushButton (PIN_SW): IO0 (active Low, add pull up 10K to 3.3V)
 - DHT11: IO13, add pullup 10K to VCC
 - BH1750: I2C (SDA: IO14, SCL:IO15; add pullup 10K to 3.3V)
+
+Device for ESP8266: 
+- Led Red: D8 (active high, Anode Led to IO02 via R (68-220) Ohm, Cathode: GND)
+- Led Yellow: D7 (active high, Anode Led to IO02 via R (68-220) Ohm, Cathode: GND)
+- Led Green: D6 (active high, Anode Led to IO12 via R (68-220) Ohm, Cathode: GND)
+- PushButton (PIN_SW): D5 (active Low, add pull up 10K to 3.3V)
+- DHT11: D3, add pullup 10K to VCC
+- BH1750: I2C (D2: IO14, SCL:D1; add pullup 10K to 3.3V)
+
 */
 #include <Arduino.h>
 #include <Ticker.h>
