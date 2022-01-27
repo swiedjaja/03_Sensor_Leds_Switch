@@ -19,7 +19,6 @@ Device for ESP8266:
 
 */
 #include <Arduino.h>
-#include <Ticker.h>
 #include <Wire.h>
 #include "BH1750.h"
 #include "DHTesp.h" // Click here to get the library: http://librarymanager/All#DHTesp
@@ -37,7 +36,6 @@ Device for ESP8266:
 
 int nCount=0;
 
-Ticker timer1Sec, ledOff;
 DHTesp dht;
 BH1750 lightMeter;
 void onReadDht()
@@ -63,11 +61,9 @@ void onReadSensors()
   digitalWrite(LED_BUILTIN, LED_BUILTIN_ON);
   onReadDht();
   onReadLight();
-  ledOff.once_ms(100, [](){
-      digitalWrite(LED_BUILTIN, LED_BUILTIN_OFF);
-      digitalWrite(arLed[nCount%LED_COUNT], LED_OFF);
-      nCount++;
-  });
+  digitalWrite(LED_BUILTIN, LED_BUILTIN_OFF);
+  digitalWrite(arLed[nCount%LED_COUNT], LED_OFF);
+  nCount++;
 }
 
 IRAM_ATTR void onResetCounter()
@@ -93,13 +89,9 @@ void setup() {
 
   Serial.printf("Board: %s\n", ARDUINO_BOARD);
   Serial.printf("DHT Sensor ready, sampling period: %d ms\n", dht.getMinimumSamplingPeriod());  
-  #if defined(ESP8266)
-    timer1Sec.attach_ms_scheduled(2*dht.getMinimumSamplingPeriod(), onReadSensors);
-  #elif defined (ESP32)
-    timer1Sec.attach_ms(2*dht.getMinimumSamplingPeriod(), onReadSensors);
-  #endif  
-
 }
 
 void loop() {
+  if (millis()%3000==0)
+    onReadSensors();
 }
